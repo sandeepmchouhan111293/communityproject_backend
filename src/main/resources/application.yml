@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: community-backend
+  profiles:
+    active: dev
