@@ -33,14 +33,23 @@ public class LocalFileStorageService implements FileStorageService {
 
     @Override
     public String storeFile(MultipartFile file) {
-        String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileExtension = "";
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null) {
+            throw new FileStorageException("Cannot store file with null filename.");
+        }
+        String cleanedFilename = StringUtils.cleanPath(originalFilename);
+
         try {
-            if (originalFilename.contains(".")) {
-                fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            if (cleanedFilename.contains("..")) {
+                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + cleanedFilename);
+            }
+
+            String fileExtension = "";
+            if (cleanedFilename.contains(".")) {
+                fileExtension = cleanedFilename.substring(cleanedFilename.lastIndexOf("."));
             }
             if (fileExtension.isBlank() || !isValidExtension(fileExtension)) {
-                 throw new FileStorageException("Invalid file type. Only PNG, JPG, GIF are allowed.");
+                 throw new FileStorageException("Invalid file type. Only PNG, JPG, GIF, JPEG are allowed.");
             }
             String newFileName = UUID.randomUUID().toString() + fileExtension;
 
@@ -49,7 +58,7 @@ public class LocalFileStorageService implements FileStorageService {
 
             return newFileName;
         } catch (IOException ex) {
-            throw new FileStorageException("Could not store file " + originalFilename + ". Please try again!", ex);
+            throw new FileStorageException("Could not store file " + cleanedFilename + ". Please try again!", ex);
         }
     }
     

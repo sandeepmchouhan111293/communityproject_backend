@@ -26,6 +26,7 @@ D:\VS Code workspace\communityproject_backend\src\main\java\com\community\manage
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\service\VolunteerService.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\entity\DiscussionReply.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\dto\response\VolunteerOpportunityResponse.java
+D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\config\SecurityConfigTest.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\dto\request\UpdateFamilyMemberRequest.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\entity\EventRegistration.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\security\JwtAuthenticationEntryPoint.java
@@ -34,6 +35,7 @@ D:\VS Code workspace\communityproject_backend\src\main\java\com\community\manage
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\dto\response\UserProfileResponse.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\repository\DirectoryRepository.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\repository\AuditLogRepository.java
+D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\controller\TestController.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\service\DirectoryService.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\controller\VolunteerController.java
 D:\VS Code workspace\communityproject_backend\src\main\java\com\community\management\service\FamilyService.java

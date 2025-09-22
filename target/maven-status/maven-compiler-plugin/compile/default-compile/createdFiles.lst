@@ -75,6 +75,7 @@ com\community\management\entity\UserRole.class
 com\community\management\security\JwtAuthenticationFilter.class
 com\community\management\dto\response\ApiResponse.class
 com\community\management\repository\VolunteerRegistrationRepository.class
+com\community\management\controller\TestController.class
 com\community\management\exception\ResourceNotFoundException.class
 com\community\management\dto\request\UpdateDiscussionRequest.class
 com\community\management\dto\response\EventRegistrationResponse$EventRegistrationResponseBuilder.class
@@ -83,6 +84,7 @@ com\community\management\entity\Event.class
 com\community\management\dto\request\UpdateUserRoleRequest.class
 com\community\management\service\FamilyService.class
 com\community\management\config\CacheConfig.class
+com\community\management\config\SecurityConfigTest.class
 com\community\management\repository\UserRepository.class
 com\community\management\service\DirectoryService.class
 com\community\management\dto\request\UpdateFamilyMemberRequest.class

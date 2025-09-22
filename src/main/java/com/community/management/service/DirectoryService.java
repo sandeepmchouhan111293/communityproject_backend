@@ -5,7 +5,6 @@ import com.community.management.dto.response.DirectoryEntryResponse;
 import com.community.management.entity.Directory;
 import com.community.management.entity.User;
 import com.community.management.exception.ResourceNotFoundException;
-import com.community.management.exception.ValidationException;
 import com.community.management.repository.DirectoryRepository;
 import com.community.management.repository.UserRepository;
 import com.community.management.security.UserPrincipal;

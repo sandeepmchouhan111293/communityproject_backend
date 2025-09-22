@@ -1,24 +1,36 @@
 package com.community.management.controller;
 
-import com.community.management.dto.request.UpdateUserRoleRequest;
-import com.community.management.dto.response.ApiResponse;
-import com.community.management.dto.response.AuditLogResponse;
-import com.community.management.dto.response.UserAdminResponse;
-import com.community.management.entity.DocumentCategory;
-import com.community.management.entity.EventStatus;
-import com.community.management.entity.UserRole;
-import com.community.management.entity.VolunteerStatus;
-import com.community.management.service.*;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.community.management.dto.request.UpdateUserRoleRequest;
+import com.community.management.dto.response.ApiResponse;
+import com.community.management.dto.response.AuditLogResponse;
+import com.community.management.dto.response.UserAdminResponse;
+import com.community.management.entity.EventStatus;
+import com.community.management.entity.UserRole;
+import com.community.management.entity.VolunteerStatus;
+import com.community.management.service.AuditService;
+import com.community.management.service.DiscussionService;
+import com.community.management.service.DocumentService;
+import com.community.management.service.EventService;
+import com.community.management.service.UserService;
+import com.community.management.service.VolunteerService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -56,7 +68,8 @@ public class AdminController {
     }
 
     @PutMapping("/users/{id}/role")
-    public ResponseEntity<UserAdminResponse> updateUserRole(@PathVariable UUID id, @Valid @RequestBody UpdateUserRoleRequest request) {
+    public ResponseEntity<UserAdminResponse> updateUserRole(@PathVariable UUID id,
+            @Valid @RequestBody UpdateUserRoleRequest request) {
         UserAdminResponse updatedUser = userService.updateUserRole(id, request.getRole());
         auditService.logAction(null, "UPDATE_USER_ROLE", "User", id, null, updatedUser); // Log as system action
         return ResponseEntity.ok(updatedUser);
@@ -89,14 +102,21 @@ public class AdminController {
         stats.put("totalVolunteerOpportunities", volunteerService.countTotalOpportunities());
         stats.put("activeVolunteerOpportunities", volunteerService.countOpportunitiesByStatus(VolunteerStatus.ACTIVE));
         stats.put("totalDocuments", documentService.countTotalDocuments());
-        stats.put("publicDocuments", documentService.countDocumentsByAccessLevel(com.community.management.entity.AccessLevel.PUBLIC));
-        stats.put("memberDocuments", documentService.countDocumentsByAccessLevel(com.community.management.entity.AccessLevel.MEMBER));
-        
+        stats.put("publicDocuments",
+                documentService.countDocumentsByAccessLevel(com.community.management.entity.AccessLevel.PUBLIC));
+        stats.put("memberDocuments",
+                documentService.countDocumentsByAccessLevel(com.community.management.entity.AccessLevel.MEMBER));
+
         return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/system-stats")
     public ResponseEntity<String> getSystemStats() {
         return ResponseEntity.ok("System Statistics Placeholder");
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> getHealth() {
+        return ResponseEntity.ok("Healthy");
     }
 }

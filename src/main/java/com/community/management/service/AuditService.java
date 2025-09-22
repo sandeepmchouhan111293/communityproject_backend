@@ -1,21 +1,22 @@
 package com.community.management.service;
 
-import com.community.management.dto.response.AuditLogResponse;
-import com.community.management.entity.AuditLog;
-import com.community.management.entity.User;
-import com.community.management.repository.AuditLogRepository;
-import com.community.management.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import com.community.management.dto.response.AuditLogResponse;
+import com.community.management.entity.AuditLog;
+import com.community.management.repository.AuditLogRepository;
+import com.community.management.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class AuditService {
@@ -30,7 +31,8 @@ public class AuditService {
     private ObjectMapper objectMapper;
 
     @Transactional
-    public void logAction(UUID userId, String action, String entityType, UUID entityId, Object oldValues, Object newValues) {
+    public void logAction(UUID userId, String action, String entityType, UUID entityId, Object oldValues,
+            Object newValues) {
         AuditLog auditLog = new AuditLog();
         if (userId != null) {
             userRepository.findById(userId).ifPresent(auditLog::setUser);

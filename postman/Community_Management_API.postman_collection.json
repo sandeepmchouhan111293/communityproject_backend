@@ -1,0 +1,961 @@
+{
+  "info": {
+    "name": "Community Management API",
+    "description": "Complete API collection for Community Management Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api"
+    },
+    {
+      "key": "jwt_token",
+      "value": ""
+    },
+    {
+      "key": "user_id",
+      "value": ""
+    },
+    {
+      "key": "event_id",
+      "value": ""
+    },
+    {
+      "key": "volunteer_opportunity_id",
+      "value": ""
+    },
+    {
+      "key": "document_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"securePassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register a new user account"
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.token);",
+                  "    console.log('JWT Token set: ' + response.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"securePassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login and get JWT token"
+          },
+          "response": []
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.token);",
+                  "    console.log('Admin JWT Token set: ' + response.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"adminPassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login as admin and get JWT token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Get Current User Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('user_id', response.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            },
+            "description": "Get authenticated user's profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Smith\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"district\": \"Manhattan\",\n  \"communityName\": \"NYC Community\",\n  \"phone\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            },
+            "description": "Update user profile information"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Avatar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/users/avatar",
+              "host": ["{{base_url}}"],
+              "path": ["users", "avatar"]
+            },
+            "description": "Upload user avatar image"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Event Management",
+      "item": [
+        {
+          "name": "Create Event (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('event_id', response.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Community Meetup\",\n  \"description\": \"Monthly community gathering to discuss local issues\",\n  \"eventDate\": \"2024-12-15T18:00:00\",\n  \"endDate\": \"2024-12-15T21:00:00\",\n  \"location\": \"Community Center, 123 Main St\",\n  \"maxParticipants\": 50,\n  \"imageUrl\": \"https://example.com/event-image.jpg\",\n  \"registrationRequired\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/events",
+              "host": ["{{base_url}}"],
+              "path": ["events"]
+            },
+            "description": "Create a new community event (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/events",
+              "host": ["{{base_url}}"],
+              "path": ["events"]
+            },
+            "description": "Get all events"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Events with Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/events?title=meetup&location=center&status=UPCOMING",
+              "host": ["{{base_url}}"],
+              "path": ["events"],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "meetup"
+                },
+                {
+                  "key": "location",
+                  "value": "center"
+                },
+                {
+                  "key": "status",
+                  "value": "UPCOMING"
+                }
+              ]
+            },
+            "description": "Get events with filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Event by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/events/{{event_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["events", "{{event_id}}"]
+            },
+            "description": "Get specific event by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Event (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Community Meetup\",\n  \"description\": \"Updated monthly community gathering\",\n  \"status\": \"ACTIVE\",\n  \"maxParticipants\": 75\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/events/{{event_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["events", "{{event_id}}"]
+            },
+            "description": "Update event (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Register for Event",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/events/{{event_id}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["events", "{{event_id}}", "register"]
+            },
+            "description": "Register current user for event"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Event Participants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/events/{{event_id}}/participants",
+              "host": ["{{base_url}}"],
+              "path": ["events", "{{event_id}}", "participants"]
+            },
+            "description": "Get event participants"
+          },
+          "response": []
+        },
+        {
+          "name": "Unregister from Event",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/events/{{event_id}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["events", "{{event_id}}", "register"]
+            },
+            "description": "Unregister from event"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Event (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/events/{{event_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["events", "{{event_id}}"]
+            },
+            "description": "Delete event (Admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Volunteer Management",
+      "item": [
+        {
+          "name": "Create Volunteer Opportunity (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('volunteer_opportunity_id', response.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Beach Cleanup\",\n  \"description\": \"Help clean our local beach and protect marine life\",\n  \"requirements\": \"Bring gloves, water bottle, and sun protection\",\n  \"location\": \"Sunset Beach, Pier 15\",\n  \"dateTime\": \"2024-12-20T09:00:00\",\n  \"durationHours\": 4,\n  \"maxVolunteers\": 20\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/volunteers/opportunities",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "opportunities"]
+            },
+            "description": "Create volunteer opportunity (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Volunteer Opportunities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/volunteers/opportunities",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "opportunities"]
+            },
+            "description": "Get all volunteer opportunities"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Volunteer Opportunities with Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/volunteers/opportunities?title=cleanup&location=beach&status=ACTIVE",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "opportunities"],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "cleanup"
+                },
+                {
+                  "key": "location",
+                  "value": "beach"
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                }
+              ]
+            },
+            "description": "Get volunteer opportunities with filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Volunteer Opportunity by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/volunteers/opportunities/{{volunteer_opportunity_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "opportunities", "{{volunteer_opportunity_id}}"]
+            },
+            "description": "Get specific volunteer opportunity"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Volunteer Opportunity (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Beach Cleanup\",\n  \"status\": \"COMPLETED\",\n  \"maxVolunteers\": 25\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/volunteers/opportunities/{{volunteer_opportunity_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "opportunities", "{{volunteer_opportunity_id}}"]
+            },
+            "description": "Update volunteer opportunity (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Register for Volunteer Opportunity",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/volunteers/opportunities/{{volunteer_opportunity_id}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "opportunities", "{{volunteer_opportunity_id}}", "register"]
+            },
+            "description": "Register for volunteer opportunity"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Volunteer Registrations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/volunteers/my-registrations",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "my-registrations"]
+            },
+            "description": "Get current user's volunteer registrations"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Opportunity Registrations (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/volunteers/opportunities/{{volunteer_opportunity_id}}/registrations",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "opportunities", "{{volunteer_opportunity_id}}", "registrations"]
+            },
+            "description": "Get registrations for specific opportunity (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Unregister from Volunteer Opportunity",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/volunteers/opportunities/{{volunteer_opportunity_id}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "opportunities", "{{volunteer_opportunity_id}}", "register"]
+            },
+            "description": "Unregister from volunteer opportunity"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Volunteer Opportunity (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/volunteers/opportunities/{{volunteer_opportunity_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["volunteers", "opportunities", "{{volunteer_opportunity_id}}"]
+            },
+            "description": "Delete volunteer opportunity (Admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Document Management",
+      "item": [
+        {
+          "name": "Upload Document (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('document_id', response.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "request",
+                  "value": "{\n  \"title\": \"Community Guidelines 2024\",\n  \"description\": \"Official community guidelines and rules\",\n  \"category\": \"POLICY\",\n  \"accessLevel\": \"PUBLIC\"\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/documents",
+              "host": ["{{base_url}}"],
+              "path": ["documents"]
+            },
+            "description": "Upload document (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents",
+              "host": ["{{base_url}}"],
+              "path": ["documents"]
+            },
+            "description": "Get all documents accessible to user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Documents with Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents?title=guidelines&category=POLICY",
+              "host": ["{{base_url}}"],
+              "path": ["documents"],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "guidelines"
+                },
+                {
+                  "key": "category",
+                  "value": "POLICY"
+                }
+              ]
+            },
+            "description": "Get documents with filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Document by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents/{{document_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["documents", "{{document_id}}"]
+            },
+            "description": "Get specific document"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Document (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Community Guidelines 2024\",\n  \"description\": \"Updated community guidelines and rules\",\n  \"accessLevel\": \"MEMBER\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/documents/{{document_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["documents", "{{document_id}}"]
+            },
+            "description": "Update document metadata (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Document Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents/categories",
+              "host": ["{{base_url}}"],
+              "path": ["documents", "categories"]
+            },
+            "description": "Get available document categories"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Document (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents/{{document_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["documents", "{{document_id}}"]
+            },
+            "description": "Delete document (Admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/users",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users"]
+            },
+            "description": "Get all users (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "{{user_id}}"]
+            },
+            "description": "Get specific user (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Role (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users/{{user_id}}/role",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "{{user_id}}", "role"]
+            },
+            "description": "Update user role (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Dashboard Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "dashboard"]
+            },
+            "description": "Get dashboard statistics (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Audit Logs (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/audit-logs",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "audit-logs"]
+            },
+            "description": "Get audit logs (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "System Health Check (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/health",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "health"]
+            },
+            "description": "Check system health (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "{{user_id}}"]
+            },
+            "description": "Delete user (Admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Additional Endpoints",
+      "item": [
+        {
+          "name": "Get Discussion Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/discussions/categories",
+              "host": ["{{base_url}}"],
+              "path": ["discussions", "categories"]
+            },
+            "description": "Get discussion categories"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Discussions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/discussions",
+              "host": ["{{base_url}}"],
+              "path": ["discussions"]
+            },
+            "description": "Get all discussions"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Directory Entries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/directory",
+              "host": ["{{base_url}}"],
+              "path": ["directory"]
+            },
+            "description": "Get directory entries"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["notifications"]
+            },
+            "description": "Get user notifications"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Global Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings/global",
+              "host": ["{{base_url}}"],
+              "path": ["settings", "global"]
+            },
+            "description": "Get global settings"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings/user",
+              "host": ["{{base_url}}"],
+              "path": ["settings", "user"]
+            },
+            "description": "Get user settings"
+          },
+          "response": []
+        },
+        {
+          "name": "Download File",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/files/sample-file.pdf",
+              "host": ["{{base_url}}"],
+              "path": ["files", "sample-file.pdf"]
+            },
+            "description": "Download a file"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn spring-boot:run:*)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "Bash(netstat:*)",
+      "Bash(ss:*)",
+      "Bash(lsof:*)",
+      "Bash(taskkill:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

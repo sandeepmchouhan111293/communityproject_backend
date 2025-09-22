@@ -1,5 +1,12 @@
 package com.community.management.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.community.management.dto.request.UpdateGlobalSettingsRequest;
 import com.community.management.dto.request.UpdateUserSettingsRequest;
 import com.community.management.dto.response.GlobalSettingsResponse;
@@ -7,18 +14,9 @@ import com.community.management.dto.response.UserSettingsResponse;
 import com.community.management.entity.Settings;
 import com.community.management.entity.User;
 import com.community.management.exception.ResourceNotFoundException;
-import com.community.management.exception.ValidationException;
 import com.community.management.repository.SettingsRepository;
 import com.community.management.repository.UserRepository;
 import com.community.management.security.UserPrincipal;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class SettingsService {

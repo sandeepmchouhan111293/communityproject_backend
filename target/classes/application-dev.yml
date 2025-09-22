@@ -24,7 +24,7 @@ logging:
 
 app:
   jwt:
-    secret: "ThisIsASecretKeyForJWTGenerationAndValidationWhichIsLongEnoughForHS512" # Replace with a secure key in production
+    secret: "Mx7$Qv!Lp2@Zc#Er9&Tm*Yk^Jb4+NcUb$Vs6%ZcV!Hd5@PoL#Ej8^RmB&Tz3&WxQ" # Replace with a secure key in production
     expiration: 86400000 # 24 hours
 
 file:
